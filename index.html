@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulačka složeného úročení</title>
+  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'League Spartan', sans-serif;
+      background-color: #fff;
+      color: #333;
+      margin: 0;
+      padding: 2rem;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    h1 {
+      color: #f5a623;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    p.subtitle {
+      color: #ffaeb8;
+      margin-bottom: 2rem;
+      font-style: italic;
+    }
+    label {
+      display: block;
+      margin: 1rem 0 0.5rem;
+    }
+    input {
+      width: 100%;
+      padding: 0.5rem;
+      border: 2px solid #ffaeb8;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+    }
+    button {
+      margin-top: 1.5rem;
+      padding: 0.75rem 1.5rem;
+      background-color: #f5a623;
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 2rem;
+      padding: 1rem;
+      background-color: #fff5f7;
+      border: 2px solid #ffaeb8;
+      border-radius: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Kalkulačka složeného úročení</h1>
+  <p class="subtitle">Začni tam, kde jsi. Použij to, co máš. Vytvoř to, co chceš.</p>
+
+  <label for="initial">Počáteční investice (Kč)</label>
+  <input type="number" id="initial" placeholder="Např. 10000">
+
+  <label for="monthly">Měēíční vklad (Kč)</label>
+  <input type="number" id="monthly" placeholder="Např. 1000">
+
+  <label for="years">Počet let</label>
+  <input type="number" id="years" placeholder="Např. 10">
+
+  <label for="interest">Roční úročí (%)</label>
+  <input type="number" id="interest" placeholder="Např. 7">
+
+  <button onclick="calculateCompoundInterest()">Spočítat</button>
+
+  <div class="result" id="result" style="display:none;"></div>
+
+  <script>
+    function calculateCompoundInterest() {
+      const initial = parseFloat(document.getElementById('initial').value) || 0;
+      const monthly = parseFloat(document.getElementById('monthly').value) || 0;
+      const years = parseInt(document.getElementById('years').value) || 0;
+      const interest = parseFloat(document.getElementById('interest').value) / 100 || 0;
+
+      let futureValue = initial * Math.pow(1 + interest / 12, 12 * years);
+      for (let i = 1; i <= years * 12; i++) {
+        futureValue += monthly * Math.pow(1 + interest / 12, 12 * years - i);
+      }
+
+      const totalInvested = initial + (monthly * 12 * years);
+      const profit = futureValue - totalInvested;
+
+      document.getElementById('result').style.display = 'block';
+      document.getElementById('result').innerHTML = `
+        <strong>Konečná částka:</strong> ${futureValue.toFixed(2)} Kč<br>
+        <strong>Celkem vloženo:</strong> ${totalInvested.toFixed(2)} Kč<br>
+        <strong>Zisk:</strong> ${profit.toFixed(2)} Kč
+      `;
+    }
+  </script>
+</body>
+</html>
