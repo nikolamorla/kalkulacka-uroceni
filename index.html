@@ -31,6 +31,32 @@
       display: block;
       margin: 1rem 0 0.5rem;
     }
+    .tooltip {
+      display: inline-block;
+      position: relative;
+      cursor: help;
+    }
+    .tooltip .tooltip-text {
+      visibility: hidden;
+      width: 240px;
+      background-color: #f5a623;
+      color: white;
+      text-align: center;
+      border-radius: 0.5rem;
+      padding: 0.75rem;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -120px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 0.9rem;
+    }
+    .tooltip:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
     input {
       width: 100%;
       padding: 0.5rem;
@@ -87,12 +113,13 @@
       border-left: 5px solid #f5a623;
       border-radius: 0.5rem;
       font-size: 0.95rem;
-      line-height: 1.6rem;
+      line-height: 1.4rem;
       color: #555;
     }
   </style>
 </head>
 <body>
+
   <h1>Kalkulačka složeného úročení</h1>
   <p class="subtitle">Začni tam, kde jsi. Použij to, co máš. Vytvoř to, co chceš.</p>
 
@@ -107,6 +134,9 @@
 
   <label for="interest">Roční úročení (%)</label>
   <input type="number" id="interest" placeholder="Např. 7" value="7">
+  <span class="tooltip" aria-label="Co je složené úročení?">🐱
+    <span class="tooltip-text">Získaný úrok se dál zhodnocuje spolu s původní investicí.</span>
+  </span>
 
   <button onclick="calculateCompoundInterest()">Spočítat</button>
 
@@ -121,102 +151,10 @@
   </div>
 
   <div class="info-box">
-    <strong> Akciový trh přináší zisk průměrně 6–8 % ročně.*</strong><br>
+    <strong>📌 Akciový trh přináší zisk průměrně 6–8 % ročně.*</strong><br>
     Vyber, jak dlouho chceš investovat a spočítej si, kolik peněz můžeš získat!<br><br>
-    <small>*Uvedené zhodnocení vychází z historických výnosů a nepředstavuje záruku budoucích výsledků. <br> Investování je vždy spojeno s rizikem. Tento web neslouží jako investiční poradenství a autorka není finanční poradkyní.</small>
+    <small>*Uvedené zhodnocení vychází z historických výnosů a nepředstavuje záruku budoucích výsledků. Investování je vždy spojeno s rizikem. Tento web neslouží jako investiční poradenství a autorka není finanční poradkyní.</small>
   </div>
 
-  <script>
-    let chart;
-
-    function calculateCompoundInterest() {
-      const initial = parseFloat(document.getElementById('initial').value) || 0;
-      const monthly = parseFloat(document.getElementById('monthly').value) || 0;
-      const years = parseInt(document.getElementById('years').value) || 0;
-      const interest = parseFloat(document.getElementById('interest').value);
-
-      if (isNaN(interest)) {
-        alert("Zadej prosím platné roční úročení.");
-        return;
-      }
-
-      const monthlyRate = interest / 100 / 12;
-      const months = years * 12;
-      const labels = [];
-      const data = [];
-      const invested = [];
-
-      let futureValue = initial * Math.pow(1 + monthlyRate, months);
-      let totalInvested = initial;
-
-      for (let i = 1; i <= months; i++) {
-        futureValue += monthly * Math.pow(1 + monthlyRate, months - i);
-      }
-
-      for (let y = 1; y <= years; y++) {
-        labels.push(`${y}. rok`);
-        const monthsElapsed = y * 12;
-        let yearlyFV = initial * Math.pow(1 + monthlyRate, monthsElapsed);
-        for (let i = 1; i <= monthsElapsed; i++) {
-          yearlyFV += monthly * Math.pow(1 + monthlyRate, monthsElapsed - i);
-        }
-        data.push(parseFloat(yearlyFV.toFixed(2)));
-        invested.push(initial + monthly * monthsElapsed);
-      }
-
-      const profit = futureValue - (initial + (monthly * months));
-
-      document.getElementById('result').style.display = 'block';
-      document.getElementById('result').innerHTML = `
-        <div class="highlight">Konečná částka: ${futureValue.toLocaleString('cs-CZ', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Kč</div>
-        <div><strong>Investované peníze:</strong> ${(initial + monthly * months).toLocaleString('cs-CZ', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Kč</div>
-        <div><strong>Obdržený úrok:</strong> ${profit.toLocaleString('cs-CZ', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Kč</div>
-      `;
-
-      if (chart) {
-        chart.destroy();
-      }
-
-      const ctx = document.getElementById('growthChart').getContext('2d');
-      chart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: labels,
-          datasets: [
-            {
-              label: 'Hodnota investice',
-              data: data,
-              borderWidth: 3,
-              borderColor: '#f5a623',
-              backgroundColor: 'transparent',
-              fill: false
-            },
-            {
-              label: 'Investované peníze',
-              data: invested,
-              borderDash: [5, 5],
-              borderWidth: 2,
-              borderColor: '#ffaeb8',
-              backgroundColor: 'transparent',
-              fill: false
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              display: true
-            }
-          },
-          scales: {
-            y: {
-              beginAtZero: false
-            }
-          }
-        }
-      });
-    }
-  </script>
 </body>
 </html>
