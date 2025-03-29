@@ -6,6 +6,7 @@
   <title>Kalkulačka složeného úročení</title>
   <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <audio id="meowSound" src="https://www.fesliyanstudios.com/play-mp3/6968" preload="auto"></audio>
   <style>
     body {
       font-family: 'League Spartan', sans-serif;
@@ -56,6 +57,16 @@
     .tooltip:hover .tooltip-text {
       visibility: visible;
       opacity: 1;
+    }
+    .tooltip:hover {
+      animation: shake 0.3s;
+    }
+    @keyframes shake {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(5deg); }
+      50% { transform: rotate(-5deg); }
+      75% { transform: rotate(3deg); }
+      100% { transform: rotate(0deg); }
     }
     input {
       width: 100%;
@@ -113,7 +124,7 @@
       border-left: 5px solid #f5a623;
       border-radius: 0.5rem;
       font-size: 0.95rem;
-      line-height: 1.4rem;
+      line-height: 1.3rem;
       color: #555;
     }
   </style>
@@ -134,7 +145,7 @@
 
   <label for="interest">Roční úročení (%)</label>
   <input type="number" id="interest" placeholder="Např. 7" value="7">
-  <span class="tooltip" aria-label="Co je složené úročení?">🐱
+  <span class="tooltip" aria-label="Co je složené úročení?" onclick="document.getElementById('meowSound').play()">🐱
     <span class="tooltip-text">Získaný úrok se dál zhodnocuje spolu s původní investicí.</span>
   </span>
 
@@ -151,9 +162,9 @@
   </div>
 
   <div class="info-box">
-    <strong>📌 Akciový trh přináší zisk průměrně 6–8 % ročně.*</strong><br>
+    <strong>Akciový trh přináší zisk průměrně 6–8 % ročně.*</strong><br>
     Vyber, jak dlouho chceš investovat a spočítej si, kolik peněz můžeš získat!<br><br>
-    <small>*Uvedené zhodnocení vychází z historických výnosů a nepředstavuje záruku budoucích výsledků. Investování je vždy spojeno s rizikem. Tento web neslouží jako investiční poradenství a autorka není finanční poradkyní.</small>
+    <small>*Uvedené zhodnocení vychází z historických výnosů a nepředstavuje záruku budoucích výsledků.<br>Investování je vždy spojeno s rizikem. Tento web neslouží jako investiční poradenství a autorka není finanční poradkyní.</small>
   </div>
 
 </body>
