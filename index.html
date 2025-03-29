@@ -219,26 +219,19 @@
 
       const ctx = document.getElementById('growthChart').getContext('2d');
       chart = new Chart(ctx, {
-        type: 'line',
+        type: 'bar',
         data: {
           labels: labels,
           datasets: [
             {
               label: 'Hodnota investice',
               data: data,
-              borderWidth: 3,
-              borderColor: '#f5a623',
-              backgroundColor: 'transparent',
-              fill: false
+              backgroundColor: '#f5a623'
             },
             {
               label: 'Investované peníze',
               data: invested,
-              borderDash: [5, 5],
-              borderWidth: 2,
-              borderColor: '#ffaeb8',
-              backgroundColor: 'transparent',
-              fill: false
+              backgroundColor: '#ffaeb8'
             }
           ]
         },
