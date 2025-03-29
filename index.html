@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kalkulačka složeného úročení</title>
   <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
       font-family: 'League Spartan', sans-serif;
@@ -37,6 +38,9 @@
       border-radius: 0.5rem;
       font-size: 1rem;
     }
+    input#interest {
+      background-color: #fffef5;
+    }
     button {
       margin-top: 1.5rem;
       padding: 0.75rem 1.5rem;
@@ -49,10 +53,23 @@
     }
     .result {
       margin-top: 2rem;
-      padding: 1rem;
+      padding: 1.5rem;
       background-color: #fff5f7;
-      border: 2px solid #ffaeb8;
-      border-radius: 0.5rem;
+      border: 3px solid #ffaeb8;
+      border-radius: 1rem;
+      font-size: 1.4rem;
+      line-height: 2.5rem;
+      font-weight: bold;
+      text-align: center;
+    }
+    .chart-container {
+      margin-top: 2rem;
+    }
+    .footer {
+      margin-top: 3rem;
+      font-size: 0.9rem;
+      text-align: center;
+      color: #aaa;
     }
   </style>
 </head>
@@ -70,13 +87,23 @@
   <input type="number" id="years" placeholder="Např. 10">
 
   <label for="interest">Roční úročení (%)</label>
-  <input type="number" id="interest" placeholder="Např. 7">
+  <input type="number" id="interest" placeholder="Např. 7" value="7">
 
   <button onclick="calculateCompoundInterest()">Spočítat</button>
 
   <div class="result" id="result" style="display:none;"></div>
 
+  <div class="chart-container">
+    <canvas id="growthChart" width="400" height="300"></canvas>
+  </div>
+
+  <div class="footer">
+    Vygenerováno pomocí Kalkulačky složeného úročení &mdash; <a href="https://nebudsvorc.cz" target="_blank">nebudsvorc.cz</a>
+  </div>
+
   <script>
+    let chart;
+
     function calculateCompoundInterest() {
       const initial = parseFloat(document.getElementById('initial').value) || 0;
       const monthly = parseFloat(document.getElementById('monthly').value) || 0;
@@ -90,22 +117,80 @@
 
       const monthlyRate = interest / 100 / 12;
       const months = years * 12;
+      const labels = [];
+      const data = [];
+      const invested = [];
 
       let futureValue = initial * Math.pow(1 + monthlyRate, months);
+      let totalInvested = initial;
 
       for (let i = 1; i <= months; i++) {
         futureValue += monthly * Math.pow(1 + monthlyRate, months - i);
       }
 
-      const totalInvested = initial + (monthly * months);
-      const profit = futureValue - totalInvested;
+      for (let y = 1; y <= years; y++) {
+        labels.push(`${y}. rok`);
+        const monthsElapsed = y * 12;
+        let yearlyFV = initial * Math.pow(1 + monthlyRate, monthsElapsed);
+        for (let i = 1; i <= monthsElapsed; i++) {
+          yearlyFV += monthly * Math.pow(1 + monthlyRate, monthsElapsed - i);
+        }
+        data.push(parseFloat(yearlyFV.toFixed(2)));
+        invested.push(initial + monthly * monthsElapsed);
+      }
+
+      const profit = futureValue - (initial + (monthly * months));
 
       document.getElementById('result').style.display = 'block';
       document.getElementById('result').innerHTML = `
-        <strong>Konečná částka:</strong> ${futureValue.toLocaleString('cs-CZ', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Kč<br>
-        <strong>Celkem vloženo:</strong> ${totalInvested.toLocaleString('cs-CZ', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Kč<br>
-        <strong>Zisk:</strong> ${profit.toLocaleString('cs-CZ', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Kč
+        <div><strong>Konečná částka:</strong> ${futureValue.toLocaleString('cs-CZ', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Kč</div>
+        <div><strong>Celkem vloženo:</strong> ${(initial + monthly * months).toLocaleString('cs-CZ', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Kč</div>
+        <div><strong>Zisk:</strong> ${profit.toLocaleString('cs-CZ', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Kč</div>
       `;
+
+      if (chart) {
+        chart.destroy();
+      }
+
+      const ctx = document.getElementById('growthChart').getContext('2d');
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Hodnota investice',
+              data: data,
+              borderWidth: 3,
+              borderColor: '#f5a623',
+              backgroundColor: 'transparent',
+              fill: false
+            },
+            {
+              label: 'Celkem vloženo',
+              data: invested,
+              borderDash: [5, 5],
+              borderWidth: 2,
+              borderColor: '#ffaeb8',
+              backgroundColor: 'transparent',
+              fill: false
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              display: true
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: false
+            }
+          }
+        }
+      });
     }
   </script>
 </body>
