@@ -75,10 +75,20 @@
       margin-top: 2rem;
     }
     .footer {
-      margin-top: 3rem;
-      font-size: 0.9rem;
+      margin-top: 1.5rem;
+      font-size: 0.85rem;
       text-align: center;
       color: #aaa;
+    }
+    .info-box {
+      margin-top: 2.5rem;
+      padding: 1.2rem;
+      background-color: #fffaf0;
+      border-left: 5px solid #f5a623;
+      border-radius: 0.5rem;
+      font-size: 0.95rem;
+      line-height: 1.6rem;
+      color: #555;
     }
   </style>
 </head>
@@ -93,7 +103,7 @@
   <input type="number" id="monthly" placeholder="Např. 1000">
 
   <label for="years">Počet let</label>
-  <input type="number" id="years" placeholder="Např. 10">
+  <input type="number" id="years" placeholder="Např. 30" value="30">
 
   <label for="interest">Roční úročení (%)</label>
   <input type="number" id="interest" placeholder="Např. 7" value="7">
@@ -107,7 +117,13 @@
   </div>
 
   <div class="footer">
-    Vygenerováno pomocí Kalkulačky složeného úročení &mdash; <a href="https://nebudsvorc.cz" target="_blank">nebudsvorc.cz</a>
+    Vygenerováno pomocí Kalkulačky od <strong>@nebudsvorc</strong> &mdash; &copy; Nikola Morla | <a href="https://nikolamorla.cz" target="_blank">nikolamorla.cz</a>
+  </div>
+
+  <div class="info-box">
+    <strong>📌 Akciový trh přináší zisk průměrně 6–8 % ročně.*</strong><br>
+    Vyber, jak dlouho chceš investovat a spočítej si, kolik peněz můžeš získat!<br><br>
+    <small>*Uvedené zhodnocení vychází z historických výnosů a nepředstavuje záruku budoucích výsledků. Investování je spojeno s rizikem. Tento web neslouží jako investiční poradenství. Autorka není finanční poradkyní.</small>
   </div>
 
   <script>
@@ -153,8 +169,8 @@
       document.getElementById('result').style.display = 'block';
       document.getElementById('result').innerHTML = `
         <div class="highlight">Konečná částka: ${futureValue.toLocaleString('cs-CZ', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Kč</div>
-        <div><strong>Celkem vloženo:</strong> ${(initial + monthly * months).toLocaleString('cs-CZ', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Kč</div>
-        <div><strong>Zisk:</strong> ${profit.toLocaleString('cs-CZ', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Kč</div>
+        <div><strong>Investované peníze:</strong> ${(initial + monthly * months).toLocaleString('cs-CZ', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Kč</div>
+        <div><strong>Obdržený úrok:</strong> ${profit.toLocaleString('cs-CZ', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Kč</div>
       `;
 
       if (chart) {
@@ -176,7 +192,7 @@
               fill: false
             },
             {
-              label: 'Celkem vloženo',
+              label: 'Investované peníze',
               data: invested,
               borderDash: [5, 5],
               borderWidth: 2,
