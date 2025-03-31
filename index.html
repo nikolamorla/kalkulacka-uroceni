@@ -146,9 +146,39 @@
   </style>
 </head>
 <body>
-  <!-- zbytek zůstává beze změny kromě grafu -->
+  <canvas id="growthChart"></canvas>
   <script>
-    let chart;
+    const ctx = document.getElementById('growthChart').getContext('2d');
+    let chart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: [],
+        datasets: [
+          {
+            label: 'Hodnota investice',
+            data: [],
+            backgroundColor: '#f47a5c',
+            borderRadius: 6
+          },
+          {
+            label: 'Investované peníze',
+            data: [],
+            backgroundColor: '#f9a8b8',
+            borderRadius: 6
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: true }
+        },
+        scales: {
+          y: { beginAtZero: false }
+        }
+      }
+    });
+
     function calculateCompoundInterest() {
       const initial = parseFloat(document.getElementById('initial').value) || 0;
       const monthly = parseFloat(document.getElementById('monthly').value) || 0;
@@ -192,38 +222,10 @@
         <div style="margin-top: 0.75rem;">✨ <strong>Obdržený úrok:</strong> ${profit.toLocaleString('cs-CZ', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Kč</div>
       `;
 
-      if (chart) chart.destroy();
-
-      const ctx = document.getElementById('growthChart').getContext('2d');
-      chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: labels,
-          datasets: [
-            {
-              label: 'Hodnota investice',
-              data: data,
-              backgroundColor: '#f47a5c',
-              borderRadius: 6
-            },
-            {
-              label: 'Investované peníze',
-              data: invested,
-              backgroundColor: '#f9a8b8',
-              borderRadius: 6
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { display: true }
-          },
-          scales: {
-            y: { beginAtZero: false }
-          }
-        }
-      });
+      chart.data.labels = labels;
+      chart.data.datasets[0].data = data;
+      chart.data.datasets[1].data = invested;
+      chart.update();
     }
   </script>
 </body>
