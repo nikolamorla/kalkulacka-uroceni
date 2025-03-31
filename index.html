@@ -13,7 +13,7 @@
       background-color: #fff;
       color: #333;
       margin: 0;
-      padding: 2rem;
+      padding: 2rem 1rem;
       max-width: 700px;
       margin-left: auto;
       margin-right: auto;
@@ -22,15 +22,18 @@
       color: #f5a623;
       font-size: 2rem;
       margin-bottom: 0.5rem;
+      text-align: center;
     }
     p.subtitle {
       color: #ffaeb8;
       margin-bottom: 2rem;
       font-style: italic;
+      text-align: center;
     }
     label {
       display: block;
       margin: 1rem 0 0.5rem;
+      font-size: 1rem;
     }
     .tooltip {
       display: inline-block;
@@ -39,26 +42,23 @@
       font-size: 2rem;
       line-height: 2rem;
     }
- .tooltip .tooltip-text {
-  visibility: hidden;
-  width: 90vw;
-  max-width: 280px;
-  background-color: #f5a623;
-  color: white;
-  text-align: center;
-  border-radius: 0.5rem;
-  padding: 0.75rem;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%;
-  left: 50%;
-  transform: translateX(-50%);
-  opacity: 0;
-  transition: opacity 0.3s;
-  font-size: 0.9rem;
-  box-sizing: border-box;
-  line-height: 1.1;
-}
+    .tooltip .tooltip-text {
+      visibility: hidden;
+      width: 240px;
+      background-color: #f5a623;
+      color: white;
+      text-align: center;
+      border-radius: 0.5rem;
+      padding: 0.75rem;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -120px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 0.9rem;
+    }
     .tooltip:hover .tooltip-text {
       visibility: visible;
       opacity: 1;
@@ -75,22 +75,24 @@
     }
     input {
       width: 100%;
-      padding: 0.5rem;
+      padding: 0.75rem;
       border: 2px solid #ffaeb8;
       border-radius: 0.5rem;
       font-size: 1rem;
+      box-sizing: border-box;
     }
     input#interest {
       background-color: #fffef5;
     }
     button {
       margin-top: 1.5rem;
-      padding: 0.75rem 1.5rem;
+      width: 100%;
+      padding: 1rem;
       background-color: #f5a623;
       color: white;
       border: none;
       border-radius: 0.5rem;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       cursor: pointer;
     }
     .result {
@@ -99,13 +101,13 @@
       background-color: #fff5f7;
       border: 3px solid #ffaeb8;
       border-radius: 1rem;
-      font-size: 1.4rem;
-      line-height: 2.5rem;
+      font-size: 1.3rem;
+      line-height: 2.2rem;
       font-weight: bold;
       text-align: center;
     }
     .result .highlight {
-      font-size: 1.7rem;
+      font-size: 1.6rem;
       color: #f85b3f;
       background-color: #fff2e6;
       padding: 0.5rem 1rem;
@@ -116,8 +118,12 @@
     .chart-container {
       margin-top: 2rem;
     }
+    canvas {
+      width: 100% !important;
+      height: auto !important;
+    }
     .footer {
-      margin-top: 1.5rem;
+      margin-top: 2rem;
       font-size: 0.85rem;
       text-align: center;
       color: #aaa;
@@ -132,123 +138,12 @@
       line-height: 1.3rem;
       color: #555;
     }
-  </style>
-</head>
-<body>
-
-  <h1>Kalkulačka složeného úročení</h1>
-  <p class="subtitle">Začni tam, kde jsi. Použij to, co máš. Vytvoř to, co chceš.</p>
-
-  <label for="initial">Počáteční investice (Kč)</label>
-  <input type="number" id="initial" placeholder="Např. 10000">
-
-  <label for="monthly">Měsíční vklad (Kč)</label>
-  <input type="number" id="monthly" placeholder="Např. 1000">
-
-  <label for="years">Počet let</label>
-  <input type="number" id="years" placeholder="Např. 30" value="30">
-
-  <label for="interest">Roční úročení (%)</label>
-  <input type="number" id="interest" placeholder="Např. 7" value="7">
-  <span class="tooltip" aria-label="Co je složené úročení?" onclick="document.getElementById('meowSound').play()">🐱
-    <span class="tooltip-text">Získaný úrok se dál zhodnocuje spolu s původní investicí.</span>
-  </span>
-
-  <button onclick="calculateCompoundInterest()">Spočítat</button>
-
-  <div class="result" id="result" style="display:none;"></div>
-
-  <div class="chart-container">
-    <canvas id="growthChart" width="400" height="300"></canvas>
-  </div>
-
-  <div class="footer">
-    Vygenerováno pomocí Kalkulačky od <strong>@nebudsvorc</strong> &mdash; &copy; Nikola Morla | <a href="https://nikolamorla.cz" target="_blank">nikolamorla.cz</a>
-  </div>
-
-  <div class="info-box">
-    <strong>Akciový trh přináší zisk průměrně 6–8 % ročně.*</strong><br>
-    Vyber, jak dlouho chceš investovat a spočítej si, kolik peněz můžeš získat!<br><br>
-    <small>*Uvedené zhodnocení vychází z historických výnosů a nepředstavuje záruku budoucích výsledků.<br>Investování je vždy spojeno s rizikem. Tento web neslouží jako investiční poradenství a autorka není finanční poradkyní.</small>
-  </div>
-
-  <script>
-    let chart;
-
-    function calculateCompoundInterest() {
-      const initial = parseFloat(document.getElementById('initial').value) || 0;
-      const monthly = parseFloat(document.getElementById('monthly').value) || 0;
-      const years = parseInt(document.getElementById('years').value) || 0;
-      const interest = parseFloat(document.getElementById('interest').value);
-
-      if (isNaN(interest)) {
-        alert("Zadej prosím platné roční úročení.");
-        return;
+    @media screen and (max-width: 480px) {
+      h1 {
+        font-size: 1.6rem;
       }
-
-      const monthlyRate = interest / 100 / 12;
-      const months = years * 12;
-      const labels = [];
-      const data = [];
-      const invested = [];
-
-      let futureValue = initial * Math.pow(1 + monthlyRate, months);
-      for (let i = 1; i <= months; i++) {
-        futureValue += monthly * Math.pow(1 + monthlyRate, months - i);
+      .result .highlight {
+        font-size: 1.4rem;
       }
-
-      for (let y = 1; y <= years; y++) {
-        labels.push(`${y}. rok`);
-        const monthsElapsed = y * 12;
-        let yearlyFV = initial * Math.pow(1 + monthlyRate, monthsElapsed);
-        for (let i = 1; i <= monthsElapsed; i++) {
-          yearlyFV += monthly * Math.pow(1 + monthlyRate, monthsElapsed - i);
-        }
-        data.push(parseFloat(yearlyFV.toFixed(2)));
-        invested.push(initial + monthly * monthsElapsed);
-      }
-
-      const totalInvested = initial + (monthly * months);
-      const profit = futureValue - totalInvested;
-
-      document.getElementById('result').style.display = 'block';
-      document.getElementById('result').innerHTML = `
-        <div class="highlight">Konečná částka: ${futureValue.toLocaleString('cs-CZ', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Kč</div>
-        <div><strong>Investované peníze:</strong> ${totalInvested.toLocaleString('cs-CZ', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Kč</div>
-        <div><strong>Obdržený úrok:</strong> ${profit.toLocaleString('cs-CZ', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Kč</div>
-      `;
-
-      if (chart) chart.destroy();
-
-      const ctx = document.getElementById('growthChart').getContext('2d');
-      chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: labels,
-          datasets: [
-            {
-              label: 'Hodnota investice',
-              data: data,
-              backgroundColor: '#f5a623'
-            },
-            {
-              label: 'Investované peníze',
-              data: invested,
-              backgroundColor: '#ffaeb8'
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { display: true }
-          },
-          scales: {
-            y: { beginAtZero: false }
-          }
-        }
-      });
     }
-  </script>
-</body>
-</html>
+  </style>
