@@ -146,6 +146,32 @@
   </style>
 </head>
 <body>
+  <h1>Kalkulačka složeného úročení</h1>
+  <p class="subtitle">Začni tam, kde jsi. Použij to, co máš. Vytvoř to, co chceš.</p>
+
+  <label for="initial">Počáteční investice (Kč)</label>
+  <input type="number" id="initial" placeholder="Např. 10000">
+
+  <label for="monthly">Měsíční vklad (Kč)</label>
+  <input type="number" id="monthly" placeholder="Např. 1000">
+
+  <label for="years">Počet let</label>
+  <input type="number" id="years" placeholder="Např. 30" value="30">
+
+  <label for="interest">Roční úročení (% p.a.)
+    <span class="tooltip">🐱
+      <span class="tooltip-text">
+        Zkratka p.a. pochází z latinského „per annum“, což znamená ročně. Používá se u úrokových sazeb.
+      </span>
+    </span>
+  </label>
+  <input type="number" id="interest" placeholder="Např. 7" value="7">
+
+  <button onclick="calculateCompoundInterest()">Spočítat</button>
+
+  <div class="result" id="result" style="display:none;"></div>
+
+  <div class="chart-container">
   <canvas id="growthChart"></canvas>
   <script>
     const ctx = document.getElementById('growthChart').getContext('2d');
