@@ -187,9 +187,9 @@
 
       document.getElementById('result').style.display = 'block';
       document.getElementById('result').innerHTML = `
-        <div class="highlight">Konečná částka: ${futureValue.toLocaleString('cs-CZ', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Kč</div>
-        <div><strong>Investované peníze:</strong> ${totalInvested.toLocaleString('cs-CZ', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Kč</div>
-        <div><strong>Obdržený úrok:</strong> ${profit.toLocaleString('cs-CZ', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Kč</div>
+        <div class="highlight">📈 Konečná částka: ${futureValue.toLocaleString('cs-CZ', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Kč</div>
+        <div style="margin-top: 1rem;">💰 <strong>Investované peníze:</strong> ${totalInvested.toLocaleString('cs-CZ', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Kč</div>
+        <div style="margin-top: 0.75rem;">✨ <strong>Obdržený úrok:</strong> ${profit.toLocaleString('cs-CZ', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Kč</div>
       `;
 
       if (chart) chart.destroy();
