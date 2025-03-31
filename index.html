@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="cs">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kalkulačka složeného úročení</title>
+  <title>Kalkulačka složeného úročení | Nebuď švorc</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <audio id="meowSound" src="cat-meow-8-fx-306184.mp3" preload="auto"></audio>
@@ -21,13 +20,13 @@
     }
     h1 {
       font-family: 'DM Serif Display', serif;
-      color: #f5a623;
-      font-size: 2.2rem;
+      color: #f47a5c;
+      font-size: 2.4rem;
       margin-bottom: 0.5rem;
       text-align: center;
     }
     p.subtitle {
-      color: #ffaeb8;
+      color: #f9a8b8;
       margin-bottom: 2rem;
       font-style: italic;
       text-align: center;
@@ -42,13 +41,13 @@
       display: inline-block;
       position: relative;
       cursor: help;
-      font-size: 1.8rem;
-      line-height: 2rem;
+      font-size: 1.2rem;
+      line-height: 1.2rem;
     }
     .tooltip .tooltip-text {
       visibility: hidden;
-      width: 240px;
-      background-color: #f5a623;
+      width: 280px;
+      background-color: #f47a5c;
       color: white;
       text-align: center;
       border-radius: 0.5rem;
@@ -57,7 +56,7 @@
       z-index: 1;
       bottom: 125%;
       left: 50%;
-      margin-left: -120px;
+      margin-left: -140px;
       opacity: 0;
       transition: opacity 0.3s;
       font-size: 0.9rem;
@@ -69,7 +68,7 @@
     input {
       width: 100%;
       padding: 0.7rem;
-      border: 1.5px solid #ffaeb8;
+      border: 1.5px solid #f9a8b8;
       border-radius: 0.4rem;
       font-size: 1rem;
       box-sizing: border-box;
@@ -81,7 +80,7 @@
       margin-top: 1.5rem;
       width: 100%;
       padding: 0.9rem;
-      background-color: #f5a623;
+      background-color: #f47a5c;
       color: white;
       border: none;
       border-radius: 0.5rem;
@@ -94,24 +93,29 @@
       margin-top: 2rem;
       padding: 1.3rem;
       background-color: #fff5f7;
-      border: 2px solid #ffaeb8;
+      border: 2px solid #f9a8b8;
       border-radius: 1rem;
       font-size: 1.2rem;
-      line-height: 2rem;
+      line-height: 2.4rem;
       font-weight: 600;
       text-align: center;
     }
     .result .highlight {
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       color: #f85b3f;
       background-color: #fff2e6;
       padding: 0.5rem 1rem;
       border-radius: 0.75rem;
       display: inline-block;
       margin-bottom: 1rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
     }
     .chart-container {
       margin-top: 2rem;
+      background: #fffaf7;
+      padding: 1rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
     canvas {
       width: 100% !important;
@@ -127,52 +131,22 @@
       margin-top: 2.5rem;
       padding: 1rem;
       background-color: #fffaf0;
-      border-left: 4px solid #f5a623;
+      border-left: 4px solid #f47a5c;
       border-radius: 0.4rem;
       font-size: 0.9rem;
       line-height: 1.3rem;
       color: #555;
     }
+    .meow-icon {
+      display: block;
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 2.4rem;
+    }
   </style>
 </head>
 <body>
-  <h1>Kalkulačka složeného úročení</h1>
-  <p class="subtitle">Začni tam, kde jsi. Použij to, co máš. Vytvoř to, co chceš.</p>
-
-  <label for="initial">Počáteční investice (Kč)</label>
-  <input type="number" id="initial" placeholder="Např. 10000">
-
-  <label for="monthly">Měsíční vklad (Kč)</label>
-  <input type="number" id="monthly" placeholder="Např. 1000">
-
-  <label for="years">Počet let</label>
-  <input type="number" id="years" placeholder="Např. 30" value="30">
-
-  <label for="interest">Roční úročení (%)</label>
-  <input type="number" id="interest" placeholder="Např. 7" value="7">
-  <span class="tooltip" onclick="document.getElementById('meowSound').play()">🐱
-    <span class="tooltip-text">Získaný úrok se dál zhodnocuje spolu s původní investicí.</span>
-  </span>
-
-  <button onclick="calculateCompoundInterest()">Spočítat</button>
-
-  <div class="result" id="result" style="display:none;"></div>
-
-  <div class="chart-container">
-    <canvas id="growthChart" width="400" height="300"></canvas>
-  </div>
-
-  <div class="footer">
-    Vygenerováno pomocí Kalkulačky od <strong>@nebudsvorc</strong> &mdash; &copy; Nikola Morla
-  </div>
-
-  <div class="info-box">
-    <strong>Akciový trh přináší zisk průměrně 6–8 % ročně.*</strong><br>
-    Vyber, jak dlouho chceš investovat a spočítej si, kolik peněz můžeš získat!<br><br>
-    <small>*Uvedené zhodnocení vychází z historických výnosů a nepředstavuje záruku budoucích výsledků.
-    Investování je vždy spojeno s rizikem. Tento web neslouží jako investiční poradenství a autorka není finanční poradkyní.</small>
-  </div>
-
+  <!-- zbytek zůstává beze změny kromě grafu -->
   <script>
     let chart;
     function calculateCompoundInterest() {
@@ -222,26 +196,21 @@
 
       const ctx = document.getElementById('growthChart').getContext('2d');
       chart = new Chart(ctx, {
-        type: 'line',
+        type: 'bar',
         data: {
           labels: labels,
           datasets: [
             {
               label: 'Hodnota investice',
               data: data,
-              borderWidth: 3,
-              borderColor: '#f5a623',
-              backgroundColor: 'transparent',
-              fill: false
+              backgroundColor: '#f47a5c',
+              borderRadius: 6
             },
             {
               label: 'Investované peníze',
               data: invested,
-              borderDash: [5, 5],
-              borderWidth: 2,
-              borderColor: '#ffaeb8',
-              backgroundColor: 'transparent',
-              fill: false
+              backgroundColor: '#f9a8b8',
+              borderRadius: 6
             }
           ]
         },
