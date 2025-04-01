@@ -6,32 +6,24 @@
   <title>Kalkulačka složeného úročení | Nebuď švorc</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-  function playMeow() {
-    const icon = document.querySelector('.tooltip');
-    document.getElementById('meowSound').play();
-    icon.classList.add('meow-animate');
-    const sparkle = document.createElement('div');
-    sparkle.classList.add('sparkle');
-    icon.appendChild(sparkle);
-    setTimeout(() => {
-      icon.classList.remove('meow-animate');
-      sparkle.remove();
-    }, 800);
-  }
-</script>
-  <audio id="meowSound" src="cat-meow-8-fx-306184.mp3" preload="auto"></audio>
   <style>
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #fff;
-      color: #333;
+      background-color: #fffaf7;
+      color: #3a3a3a;
       margin: 0;
       padding: 2rem 1rem;
-      max-width: 440px;
-      margin-left: auto;
-      margin-right: auto;
     }
+
+    .shadow-box {
+      max-width: 440px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      background-color: #fff;
+      border-radius: 1rem;
+      box-shadow: 0 0 30px rgba(244, 122, 92, 0.25);
+    }
+
     h1 {
       font-family: 'DM Serif Display', serif;
       color: #f47a5c;
@@ -39,26 +31,29 @@
       margin-bottom: 0.5rem;
       text-align: center;
     }
+
     p.subtitle {
-      color: #f9a8b8;
+      color: #ffaeb8;
       margin-bottom: 2rem;
       font-style: italic;
       text-align: center;
       font-size: 1rem;
     }
+
     label {
       display: block;
       margin: 1rem 0 0.5rem;
       font-size: 1rem;
     }
+
     .tooltip {
       transition: transform 0.3s ease;
       display: inline-block;
       position: relative;
       cursor: help;
       font-size: 1.2rem;
-      line-height: 1.2rem;
     }
+
     .tooltip .tooltip-text {
       visibility: hidden;
       width: 280px;
@@ -76,21 +71,25 @@
       transition: opacity 0.3s;
       font-size: 0.9rem;
     }
+
     .tooltip:hover .tooltip-text {
       visibility: visible;
       opacity: 1;
     }
+
     input {
       width: 100%;
       padding: 0.7rem;
-      border: 1.5px solid #f9a8b8;
+      border: 1.5px solid #ffaeb8;
       border-radius: 0.4rem;
       font-size: 1rem;
       box-sizing: border-box;
     }
+
     input#interest {
       background-color: #fffef5;
     }
+
     button {
       margin-top: 1.5rem;
       width: 100%;
@@ -104,17 +103,19 @@
       cursor: pointer;
       transition: background-color 0.2s;
     }
+
     .result {
       margin-top: 2rem;
       padding: 1.3rem;
       background-color: #fff5f7;
-      border: 2px solid #f9a8b8;
+      border: 2px solid #ffaeb8;
       border-radius: 1rem;
       font-size: 1.2rem;
       line-height: 2.4rem;
       font-weight: 600;
       text-align: center;
     }
+
     .result .highlight {
       font-size: 1.6rem;
       color: #f85b3f;
@@ -125,26 +126,30 @@
       margin-bottom: 1rem;
       box-shadow: 0 0 10px rgba(0,0,0,0.05);
     }
+
     .chart-container {
       margin-top: 2rem;
       background: #fffaf7;
       padding: 1rem;
       border-radius: 1rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      height: 400px;
     }
+
     canvas {
       width: 100% !important;
-      height: auto !important;
+      height: 100% !important;
       border: 1px solid #eee;
       border-radius: 0.75rem;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
     }
+
     .footer {
       margin-top: 2rem;
       font-size: 0.85rem;
       text-align: center;
       color: #aaa;
     }
+
     .info-box {
       margin-top: 2.5rem;
       padding: 1rem;
@@ -155,27 +160,25 @@
       line-height: 1.3rem;
       color: #555;
     }
-    .meow-icon {
-      display: block;
-      text-align: center;
-      margin-top: 2rem;
-      font-size: 2.4rem;
+
+    .meow-animate {
+      animation: meowWiggle 0.6s ease;
     }
-      @keyframes meowWiggle {
+
+    @keyframes meowWiggle {
       0% { transform: rotate(0deg); }
       25% { transform: rotate(15deg); }
       50% { transform: rotate(-15deg); }
       75% { transform: rotate(10deg); }
       100% { transform: rotate(0deg); }
     }
-    .meow-animate {
-      animation: meowWiggle 0.6s ease;
-    }
-      @keyframes sparkle {
+
+    @keyframes sparkle {
       0% { opacity: 0.8; transform: scale(0.9) rotate(0deg); }
       50% { opacity: 1; transform: scale(1.3) rotate(180deg); }
       100% { opacity: 0; transform: scale(0.9) rotate(360deg); }
     }
+
     .sparkle {
       position: absolute;
       top: -10px;
@@ -187,49 +190,65 @@
       animation: sparkle 0.8s ease-out forwards;
       pointer-events: none;
     }
-</style>
+  </style>
 </head>
 <body>
-  <h1>Spočítej si investice</h1>
-  <p class="subtitle">Začni tam, kde jsi. Použij to, co máš. Vytvoř to, co chceš.</p>
+  <audio id="meowSound" src="cat-meow-8-fx-306184.mp3" preload="auto"></audio>
+  <div class="shadow-box">
+    <h1>Spočítej si investice</h1>
+    <p class="subtitle">Začni tam, kde jsi. Použij to, co máš. Vytvoř to, co chceš.</p>
 
-  <label for="initial">Počáteční investice (Kč)</label>
-  <input type="number" id="initial" placeholder="Např. 10000">
+    <label for="initial">Počáteční investice (Kč)</label>
+    <input type="number" id="initial" placeholder="Např. 10000">
 
-  <label for="monthly">Měsíční vklad (Kč)</label>
-  <input type="number" id="monthly" placeholder="Např. 1000">
+    <label for="monthly">Měsíční vklad (Kč)</label>
+    <input type="number" id="monthly" placeholder="Např. 1000">
 
-  <label for="years">Počet let</label>
-  <input type="number" id="years" placeholder="Např. 30" value="30">
+    <label for="years">Počet let</label>
+    <input type="number" id="years" placeholder="Např. 30" value="30">
 
-  <label for="interest">Roční úročení (% p.a.)
-    <span class="tooltip" onclick="playMeow()">🐱
-      <span class="tooltip-text">
-        Zkratka p.a. pochází z latinského „per annum“, což znamená ročně. Používá se u úrokových sazeb.
+    <label for="interest">Roční úročení (% p.a.)
+      <span class="tooltip" onclick="playMeow()">🐱
+        <span class="tooltip-text">
+          Zkratka p.a. pochází z latinského „per annum“, což znamená ročně. Používá se u úrokových sazeb.
+        </span>
       </span>
-    </span>
-  </label>
-  <input type="number" id="interest" placeholder="Např. 7" value="7">
+    </label>
+    <input type="number" id="interest" placeholder="Např. 7" value="7">
 
-  <button onclick="calculateCompoundInterest()">Spočítat</button>
+    <button onclick="calculateCompoundInterest()">Spočítat</button>
 
-  <div class="result" id="result" style="display:none;"></div>
+    <div class="result" id="result" style="display:none;"></div>
 
-  <div class="chart-container">
-    <canvas id="growthChart"></canvas>
-  </div>
+    <div class="chart-container">
+      <canvas id="growthChart"></canvas>
+    </div>
 
-  <div class="footer">
-    Vygenerováno pomocí Kalkulačky od <strong>@nebudsvorc</strong> — &copy; Nikola Morla | <a href="https://nikolamorla.cz" target="_blank">nikolamorla.cz</a>
-  </div>
+    <div class="footer">
+      Vygenerováno pomocí Kalkulačky od <strong>@nebudsvorc</strong> — &copy; Nikola Morla | <a href="https://nikolamorla.cz" target="_blank">nikolamorla.cz</a>
+    </div>
 
-  <div class="info-box">
-    <strong>Akciový trh přináší zisk průměrně 6–8 % ročně.*</strong><br>
-    Vyber, jak dlouho chceš investovat a spočítej si, kolik peněz můžeš získat!<br><br>
-    <small>*Uvedené zhodnocení vychází z historických výnosů a nepředstavuje záruku budoucích výsledků.<br>Investování je vždy spojeno s rizikem. Tento web neslouží jako investiční poradenství a autorka není finanční poradkyní.</small>
+    <div class="info-box">
+      <strong>Akciový trh přináší zisk průměrně 6–8 % ročně.*</strong><br>
+      Vyber, jak dlouho chceš investovat a spočítej si, kolik peněz můžeš získat!<br><br>
+      <small>*Uvedené zhodnocení vychází z historických výnosů a nepředstavuje záruku budoucích výsledků.<br>Investování je vždy spojeno s rizikem. Tento web neslouží jako investiční poradenství a autorka není finanční poradkyní.</small>
+    </div>
   </div>
 
   <script>
+    function playMeow() {
+      const icon = document.querySelector('.tooltip');
+      document.getElementById('meowSound').play();
+      icon.classList.add('meow-animate');
+      const sparkle = document.createElement('div');
+      sparkle.classList.add('sparkle');
+      icon.appendChild(sparkle);
+      setTimeout(() => {
+        icon.classList.remove('meow-animate');
+        sparkle.remove();
+      }, 800);
+    }
+
     const ctx = document.getElementById('growthChart').getContext('2d');
     let chart = new Chart(ctx, {
       type: 'bar',
@@ -245,13 +264,14 @@
           {
             label: 'Investované peníze',
             data: [],
-            backgroundColor: '#f9a8b8',
+            backgroundColor: '#ffaeb8',
             borderRadius: 6
           }
         ]
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
           legend: { display: true }
         },
@@ -311,4 +331,4 @@
     }
   </script>
 </body>
-  </html>
+</html>
